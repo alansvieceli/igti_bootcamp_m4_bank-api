@@ -2,6 +2,13 @@ import {
   insertAccount,
   selectByAgenciaContaAccount,
   selectByContaAccount,
+  averageAccount,
+  selectLowestBalanceByLimit,
+  selectHighestBalanceByLimit,
+  selectAllAgenciasNotPrivate,
+  selectHighestBalanceByAgencia,
+  selectByAgenciaAccount,
+  deleteAccount,
 } from '../repositories/accountsRepository.js';
 
 const TARIFA_SAQUE = 1;
@@ -91,6 +98,59 @@ export const transfer = async json => {
     destinoAccount.save();
 
     return { balance_origem: origemAccount.balance };
+  } catch (err) {
+    return { error: err.message };
+  }
+};
+
+export const average = async agencia => {
+  try {
+    const avg = await averageAccount(Number(agencia));
+    return { avg: avg };
+  } catch (err) {
+    return { error: err.message };
+  }
+};
+
+export const lowestBalance = async count => {
+  try {
+    return await selectLowestBalanceByLimit(Number(count));
+  } catch (err) {
+    return { error: err.message };
+  }
+};
+
+export const highestBalance = async count => {
+  try {
+    return await selectHighestBalanceByLimit(Number(count));
+  } catch (err) {
+    return { error: err.message };
+  }
+};
+
+export const transferPrivate = async () => {
+  try {
+    const agenciasList = await selectAllAgenciasNotPrivate();
+
+    for (const agencia of agenciasList) {
+      const account = await selectHighestBalanceByAgencia(agencia);
+      account.agencia = 99;
+      await account.save();
+    }
+
+    let account = await selectByAgenciaAccount(99);
+    if (!account) account = [];
+
+    return account;
+  } catch (err) {
+    return { error: err.message };
+  }
+};
+
+export const deleteByAgenciaConta = async (agencia, conta) => {
+  try {
+    await deleteAccount(agencia, conta);
+    return await selectByAgenciaAccount(agencia);
   } catch (err) {
     return { error: err.message };
   }

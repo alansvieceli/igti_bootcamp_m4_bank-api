@@ -7,6 +7,11 @@ import {
   withdrawal,
   selectByAgenciaConta,
   transfer,
+  average,
+  lowestBalance,
+  highestBalance,
+  transferPrivate,
+  deleteByAgenciaConta,
 } from '../services/accountService.js';
 
 const router = express.Router();
@@ -63,6 +68,53 @@ router.patch('/withdrawal', async (req, res, next) => {
 });
 
 /*
+Crie um endpoint para consultar a média do saldo dos clientes de determinada
+agência. O endpoint deverá receber como parâmetro a “agência” e deverá retornar
+o balance médio da conta.
+*/
+router.get('/avg/:agencia', async (req, res, next) => {
+  const data = await average(req.params.agencia);
+
+  if (data.error !== undefined) {
+    next(data.error);
+  } else {
+    res.send(data);
+  }
+});
+
+/*
+Crie um endpoint para consultar os clientes com o menor saldo em conta. O endpoint
+deverá receber como parâmetro um valor numérico para determinar a quantidade de
+clientes a serem listados, e o endpoint deverá retornar em ordem crescente pelo
+saldo a lista dos clientes (agência, conta, saldo).
+*/
+router.get('/lowest_balance/:count', async (req, res, next) => {
+  const data = await lowestBalance(req.params.count);
+
+  if (data.error !== undefined) {
+    next(data.error);
+  } else {
+    res.send(data);
+  }
+});
+
+/*
+Crie um endpoint para consultar os clientes mais ricos do banco. O endpoint deverá
+receber como parâmetro um valor numérico para determinar a quantidade de clientes
+a serem listados, e o endpoint deverá retornar em ordem decrescente pelo saldo,
+crescente pelo nome, a lista dos clientes (agência, conta, nome e saldo).
+*/
+router.get('/highest_balance/:count', async (req, res, next) => {
+  const data = await highestBalance(req.params.count);
+
+  if (data.error !== undefined) {
+    next(data.error);
+  } else {
+    res.send(data);
+  }
+});
+
+/*
 Crie um endpoint para consultar o saldo da conta. Este endpoint deverá receber
 como parâmetro a “agência” e o número da conta, e deverá retornar seu “balance”.
 Caso a conta informada não exista, retornar um erro.
@@ -81,6 +133,14 @@ Crie um endpoint para excluir uma conta. Este endpoint deverá receber como
 parâmetro a “agência” e o número da conta e retornar o número de contas ativas
 para esta agência.
 */
+router.delete('/:agencia/:conta', async (req, res, next) => {
+  const data = await deleteByAgenciaConta(req.params.agencia, req.params.conta);
+  if (data.error !== undefined) {
+    next(data.error);
+  } else {
+    res.send(data);
+  }
+});
 
 /*
 Crie um endpoint para realizar transferências entre contas. Este endpoint deverá
@@ -101,30 +161,19 @@ router.patch('/transfer', async (req, res, next) => {
 });
 
 /*
-Crie um endpoint para consultar a média do saldo dos clientes de determinada
-agência. O endpoint deverá receber como parâmetro a “agência” e deverá retornar
-o balance médio da conta.
-*/
-
-/*
-Crie um endpoint para consultar os clientes com o menor saldo em conta. O endpoint
-deverá receber como parâmetro um valor numérico para determinar a quantidade de
-clientes a serem listados, e o endpoint deverá retornar em ordem crescente pelo
-saldo a lista dos clientes (agência, conta, saldo).
-*/
-
-/*
-Crie um endpoint para consultar os clientes mais ricos do banco. O endpoint deverá
-receber como parâmetro um valor numérico para determinar a quantidade de clientes
-a serem listados, e o endpoint deverá retornar em ordem decrescente pelo saldo,
-crescente pelo nome, a lista dos clientes (agência, conta, nome e saldo).
-*/
-
-/*
 Crie um endpoint que irá transferir o cliente com maior saldo em conta de cada
 agência para a agência private agencia=99. O endpoint deverá retornar a lista dos
 clientes da agencia private.
 */
+router.put('/transfer_private', async (req, res, next) => {
+  const data = await transferPrivate();
+
+  if (data.error !== undefined) {
+    next(data.error);
+  } else {
+    res.send(data);
+  }
+});
 
 //tratamento de todos os erros q derem acima, e usaram
 router.use((err, req, res, next) => {
