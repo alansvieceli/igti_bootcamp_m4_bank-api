@@ -1,9 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 
-import { logger } from './modules/log.js';
-import accountsRountes from './routes/accounts.js';
-import { initDatabase } from './modules/repository.js';
+import { logger } from './utils/log.js';
+import accountsRountes from './routes/accountsRoutes.js';
+import { initDatabase } from './database/config.js';
 
 const app = express();
 const port = 3001;

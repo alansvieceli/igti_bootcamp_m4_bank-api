@@ -1,4 +1,18 @@
-const connectionString =
-  'mongodb+srv://alan:456852@bootcampigti.wamxt.mongodb.net/my-bank?retryWrites=true&w=majority';
+import mongoose from 'mongoose';
+import { logger } from '../utils/log.js';
 
-export default connectionString;
+const connectionString =
+  'mongodb+srv://vieceli:trzcSJyPwpgyFI2r@bootcampigti.wamxt.mongodb.net/my-bank?retryWrites=true&w=majority';
+
+export const initDatabase = async () => {
+  try {
+    await mongoose.connect(connectionString, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    logger.info('Conectado ao MongoDB');
+  } catch (err) {
+    logger.error('Erro ao conectar no MongoDB');
+    logger.error(err);
+  }
+};

@@ -1,13 +1,13 @@
 import express from 'express';
 
-import { logger } from '../modules/log.js';
+import { logger } from '../utils/log.js';
 import {
-  insertAccount,
-  depositAccount,
-  withdrawalAccount,
-  selectAccount,
-  transferAccount,
-} from '../modules/repository.js';
+  insert,
+  deposit,
+  withdrawal,
+  selectByAgenciaConta,
+  transfer,
+} from '../services/accountService.js';
 
 const router = express.Router();
 
@@ -16,7 +16,7 @@ router.get('/', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
-  const data = await insertAccount(req.body);
+  const data = await insert(req.body);
 
   if (data.error !== undefined) {
     next(data.error);
@@ -33,11 +33,7 @@ parâmetro. O endpoint deverá validar se a conta informada existe, caso não ex
 deverá retornar um erro, caso exista retornar o saldo atual da conta.
 */
 router.patch('/deposit', async (req, res, next) => {
-  const data = await depositAccount(
-    req.body.agencia,
-    req.body.conta,
-    req.body.value
-  );
+  const data = await deposit(req.body);
 
   if (data.error !== undefined) {
     next(data.error);
@@ -57,11 +53,7 @@ para aquele saque, se não tiver deverá retornar um erro, não permitindo assim
 o saque fique negativo.
 */
 router.patch('/withdrawal', async (req, res, next) => {
-  const data = await withdrawalAccount(
-    req.body.agencia,
-    req.body.conta,
-    req.body.value
-  );
+  const data = await withdrawal(req.body);
 
   if (data.error !== undefined) {
     next(data.error);
@@ -76,7 +68,7 @@ como parâmetro a “agência” e o número da conta, e deverá retornar seu �
 Caso a conta informada não exista, retornar um erro.
 */
 router.get('/:agencia/:conta', async (req, res, next) => {
-  const data = await selectAccount(req.params.agencia, req.params.conta);
+  const data = await selectByAgenciaConta(req.params.agencia, req.params.conta);
   if (data.error !== undefined) {
     next(data.error);
   } else {
@@ -99,11 +91,7 @@ tarifa de transferência (8) deve ser debitado na conta origem. O endpoint dever
 retornar o saldo da conta origem.
 */
 router.patch('/transfer', async (req, res, next) => {
-  const data = await transferAccount(
-    req.body.conta_origem,
-    req.body.conta_destino,
-    req.body.value
-  );
+  const data = await transfer(req.body);
 
   if (data.error !== undefined) {
     next(data.error);
