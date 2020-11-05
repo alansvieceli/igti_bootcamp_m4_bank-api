@@ -1,0 +1,27 @@
+{
+  "name": "igti_bootcamp_m4_bank-api",
+  "version": "1.0.0",
+  "description": "API Utilizando Mongodb Atlas",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alansvieceli/igti_bootcamp_m4_bank-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alansvieceli/igti_bootcamp_m4_bank-api/issues"
+  },
+  "homepage": "https://github.com/alansvieceli/igti_bootcamp_m4_bank-api#readme",
+  "type": "module",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.10.12",
+    "winston": "^3.3.3"
+  }
+}
