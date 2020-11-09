@@ -1,3 +1,4 @@
+import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 
@@ -5,8 +6,10 @@ import { logger } from './utils/log.js';
 import accountsRountes from './routes/accountsRoutes.js';
 import { initDatabase } from './database/config.js';
 
+dotenv.config();
+
 const app = express();
-const port = 3001;
+const port = process.env.SRV_PORT;
 
 app.use(express.json());
 app.use(cors()); //Libera o cors
