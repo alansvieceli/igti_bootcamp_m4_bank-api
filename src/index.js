@@ -9,7 +9,7 @@ import { initDatabase } from './database/config.js';
 dotenv.config();
 
 const app = express();
-const port = process.env.SRV_PORT;
+const port = process.env.PORT;
 
 app.use(express.json());
 app.use(cors()); //Libera o cors
