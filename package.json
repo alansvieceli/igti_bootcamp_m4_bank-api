@@ -4,7 +4,7 @@
   "description": "API Utilizando Mongodb Atlas",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/index.js"
+    "start": "npm src/index.js"
   },
   "repository": {
     "type": "git",
