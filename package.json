@@ -4,7 +4,7 @@
   "description": "API Utilizando Mongodb Atlas",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node -r dotenv/config --expermental-modules src/index.js"
   },
   "repository": {
     "type": "git",
